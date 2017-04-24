@@ -9,10 +9,14 @@ function Book(title, sinopse, isbn, img, links){
 	this.img = img;
 	this.links = links;
 	this.rack;
+
+		//adiciona 1 like
 		this.Love = function(){
 			this.likes++;
 			return this.likes;
 		}
+
+
 		this.Hate = function(){
 			this.dislikes++;
 			return this.dislikes;
@@ -46,7 +50,7 @@ function Book(title, sinopse, isbn, img, links){
 				event.data.livro.Render(event.data.id);
 			});
 			var idImagem = "#"+id+" .imagem";
-			$(idImagem).html(this.img);
+			$(idImagem).attr('src', this.img);
 			
 			var idLink = "#"+id+" .link";
 			$(idLink).html(this.links);
@@ -104,10 +108,14 @@ function BookShelf(){
 
 		for (var i=0; i<pesquisa.items.length; i++){
 			var titulo = pesquisa.items[i].volumeInfo.title;
-			var sinopse = pesquisa.items[i].volumeInfo.description;
+			if (pesquisa.items[i].volumeInfo.description.length < 200){
+				var sinopse = pesquisa.items[i].volumeInfo.description;
+			}else{
+				var sinopse = pesquisa.items[i].volumeInfo.description.substring(0, 199) + " (...)";
+			}
 			var isbn = pesquisa.items[i].volumeInfo.industryIdentifiers[0].identifier;
 			var link = "<a href='"+pesquisa.items[i].volumeInfo.infoLink+"'> link </a>";
-			var img = "<img src='"+pesquisa.items[i].volumeInfo.imageLinks.thumbnail+"'"+" class='img'>";
+			var img = pesquisa.items[i].volumeInfo.imageLinks.thumbnail;
 			var livro = new Book(titulo, sinopse, "-", img, link);
 
 			this.add(livro);
@@ -148,9 +156,8 @@ $("#proc").click(function(){
 	pesquisar.load(pesca);
 });
 
-
-
-console.log($("#search").val());
+var x = "interesting skyscrapers in the United States "
+console.log(x.length);
 
 
 
