@@ -1,0 +1,107 @@
+#booker{
+	/* color select*/
+	color:black;
+	background-color: green;
+	font-weight: bold;
+	text-align: center;
+	font-style: italic;
+	font-size: 50;
+
+	}
+
+.branco{
+	color:white;
+}			
+
+.thumbs{
+	width: 100%;
+	height: 100%;
+}
+
+.betaog{
+	width: 50%;
+	height: 50%;
+	background-color: white;
+	border-color: white;
+	border-style: solid;
+}
+
+.betaon{
+	width: 50%;
+	height: 50%;
+	background-color: white;
+	border-color: white;
+	border-style: solid;
+}
+
+.img{
+	width:100%;
+	height:70%;
+	margin-left: auto;
+	margin-right: auto;
+
+	}
+
+@media(min-width: 1200px){
+	.img{
+		width: 100%;
+    	height: 80%;
+		text-align:center;
+		margin-right: auto;
+     	margin-left: auto;
+	}
+}	
+
+.img1{
+
+	background: url("livro1.jpg");
+	background-size: cover;
+
+}
+
+.img2{
+
+	background-image: url("livro2.jpg");
+	background-size: cover;
+}
+
+.img3{
+
+	background-image: url("livro3.jpg");
+	background-size: cover;
+}
+
+.alinhado{
+	text-align: center;
+}
+
+@media(min-width: 1200px){
+	.alinhado{
+		width: 400px;
+		text-align:center;
+		margin-right: auto;
+     	margin-left: auto;
+	}
+
+
+.esquerda    {
+   	width: 33%;
+    height: 80%;
+    float: left;
+}
+
+
+
+
+.centro  {
+    width: 70%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+			
+
+#alinhado{
+	text-align: center;
+}
