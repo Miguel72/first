@@ -9,6 +9,7 @@ function Book(title, sinopse, isbn, img, links){
 	this.img = img;
 	this.links = links;
 	this.rack;
+	
 
 		//adiciona 1 like
 		this.Love = function(){
@@ -21,14 +22,37 @@ function Book(title, sinopse, isbn, img, links){
 			this.dislikes++;
 			return this.dislikes;
 		}
+		
+		
 			
 		this.Render = function(id){
 			var idTitulo = "#"+id+" .titulo";
 			$(idTitulo).html(this.title);
-
+			
+			var idMore = "#" + id + " .more";
+			
+			var idHiden = "#" + id + " .hiden";
+			
 			var idSinopse = "#"+id+" .sino";
-			$(idSinopse).html(this.sinopse);
+			
+			if (this.sinopse.length < 200){
+				$(idSinopse).html(this.sinopse);
+			}else{
+				$(idSinopse).html(this.sinopse.substring(0,199)+"<button class ='more' >(...)</button>");
+				$(idHiden).hide();
+			}
 
+			var data = {"livro":this,"id":id,"more":idMore,"less":idHiden,"sino":idSinopse};
+			$(idMore).off('click');
+			$(idMore).click(data,function(event){
+				$(event.data.sino).html(event.data.livro.sinopse+"<button class ='hiden' >(hide)</button>");
+			});
+			
+			$(idHiden).off('click');
+			$(idHiden).click(data,function(event){
+				$(event.data.sino).html(event.data.livro.sinopse.substring(0,199)+"<button class ='more' >(...)</button>");
+			});
+			
 			var idGosto = "#"+id+" .gosto";
 			$(idGosto).html(this.likes);
 
@@ -108,11 +132,7 @@ function BookShelf(){
 
 		for (var i=0; i<pesquisa.items.length; i++){
 			var titulo = pesquisa.items[i].volumeInfo.title;
-			if (pesquisa.items[i].volumeInfo.description.length < 200){
-				var sinopse = pesquisa.items[i].volumeInfo.description;
-			}else{
-				var sinopse = pesquisa.items[i].volumeInfo.description.substring(0, 199) + " (...)";
-			}
+			var sinopse = pesquisa.items[i].volumeInfo.description;
 			var isbn = pesquisa.items[i].volumeInfo.industryIdentifiers[0].identifier;
 			var link = "<a href='"+pesquisa.items[i].volumeInfo.infoLink+"'> link </a>";
 			var img = pesquisa.items[i].volumeInfo.imageLinks.thumbnail;
@@ -148,7 +168,7 @@ function BookShelf(){
 
 var pesquisar = new BookShelf();
 
-pesquisar.load("top 10 books");
+pesquisar.load("lord of the rings");
 
 $("#proc").off('click');
 $("#proc").click(function(){

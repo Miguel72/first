@@ -34,7 +34,7 @@
 	border-style: solid;
 }
 
-.img{
+.imagem{
 	width:100%;
 	height:70%;
 	margin-left: auto;
@@ -43,7 +43,7 @@
 	}
 
 @media(min-width: 1200px){
-	.img{
+	.imagem{
 		width: 100%;
     	height: 80%;
 		text-align:center;
@@ -104,4 +104,18 @@
 
 #alinhado{
 	text-align: center;
+}
+
+.more{
+	background-color: transparent;
+	border-color: transparent;
+	border-style: transparent;
+	color: blue;
+}
+
+.hiden{
+	background-color: transparent;
+	border-color: transparent;
+	border-style: transparent;
+	color: blue;
 }
