@@ -111,24 +111,27 @@ function Queue(){
 
 
 
-function BookShelf(){
 
+
+function BookShelf(){
+	this.db = openDatabase("base.db","1.0","novo", 2 * 1024 * 1024);
 	this.shelf = new Queue();
 
 	// procura a variavel pesquisa no google e corre a funcao parsBook para essa variavel
 	this.load = function(pesquisa){
-	var currentBS = this;
-	this.shelf = new Queue();
+		var currentBS = this;
+		this.shelf = new Queue();
 
-		$.get("https://www.googleapis.com/books/v1/volumes?q="+pesquisa) //fazer o pedido
-			.done(function(data){	//quando o pedido é devolvido harry = data;
+			$.get("https://www.googleapis.com/books/v1/volumes?q="+pesquisa) //fazer o pedido
+				.done(function(data){	//quando o pedido é devolvido harry = data;
 
-				currentBS.parsBook(data);
+					currentBS.parsBook(data);
 
-			})
-			.fail(function(data){
-				console.log('Error: ' + data);
-			})
+				})
+				.fail(function(data){
+					console.log('Error: ' + data);
+				})
+		this.transe();
 	}
 
 	this.parsBook = function(pesquisa){ /*se a pesquisa for um json de livros, adiciona todos os livros à
@@ -140,7 +143,7 @@ function BookShelf(){
 			var isbn = pesquisa.items[i].volumeInfo.industryIdentifiers[0].identifier;
 			var link = "<a href='"+pesquisa.items[i].volumeInfo.infoLink+"'> link </a>";
 			var img = pesquisa.items[i].volumeInfo.imageLinks.thumbnail;
-			var livro = new Book(titulo, sinopse, "-", img, link);
+			var livro = new Book(titulo, sinopse, isbn, img, link);
 
 			this.add(livro);
 
@@ -171,12 +174,51 @@ function BookShelf(){
  		var newBook = this.shelf.dequeue();
  		newBook.Render(id);
  	}
+
+	this.newData = function(){
+	   this.db.transaction(function (tx) {
+	 
+            tx.executeSql("CREATE TABLE PESQUISAR("+			
+					"BOOK_ID INTEGER PRIMARY KEY NOT NULL,"+
+					"TITLE TEXT NOT NULL,"+
+					"SINOPSE TEXT,"+
+					"ISBN TEXT,"+
+					"IMG TEXT,"+
+					"LINKS TEXT)");
+
+	    });
+	}
+
+
+	this.transe = function(){
+		var currentBS = this;
+	 	this.db.transaction(function(tx) {
+
+		 	for (var j = 0; j<currentBS.shelf.data.length; j++){
+			    var newBook = j;
+			    var ing0 = currentBS.shelf.data[j].title;
+			    var ing1 = currentBS.shelf.data[j].sinopse;
+			    var ing2 = currentBS.shelf.data[j].isbn;
+			    var ing3 = currentBS.shelf.data[j].img;
+			    var ing4 = currentBS.shelf.data[j].links;
+			    tx.executeSql("INSERT INTO PESQUISAR(BOOK_ID, TITLE, SINOPSE, ISBN, IMG, LINKS) VALUES ("+newBook+",'"+ing0+"','"+ing1+"','"+ing2+"','"+ing3+"','"+ing4+"');")
+			}
+		});
+	}
+
+
  }
 
 
 var pesquisar = new BookShelf();
 
+pesquisar.newData();
+
 pesquisar.load("lord of the rings");
+
+pesquisar.transe();
+
+
 
 //butao de pesquisa de livros
 $("#proc").off('click');
@@ -185,22 +227,10 @@ $("#proc").click(function(){
 	pesquisar.load(pesca);
 });
 
-var db = openDatabase("base.db","1.0","novo", 2 * 1024 * 1024);
 
-title, sinopse, isbn, img, links
 
-	tx.executeSql("CREATE TABLE PESQUISAR("+			
-					"BOOK_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"+
-					"TITLE TEXT NOT NULL,"+
-					"SINOPSE TEXT,"+
-					"ISBN INT,"+
-					"IMG TEXT,"+
-					"LINKS TEXT,"+
-					"LIKES INT NOT NULL,"+
-					"DISLIKES INT NOT NULL)"
-	);
 
-		tx.executeSql("INSERT INTO ARTIST(NAME,CACHE,TYPE)"+
+/*		tx.executeSql("INSERT INTO ARTIST(NAME,CACHE,TYPE)"+
 					" VALUES('Quim Barreiors',1000.0,'Pimba');"
 		);
 
@@ -209,18 +239,82 @@ title, sinopse, isbn, img, links
 		);
 
 
-db.transaction(function(tx){
+db.transaction(function(transaction){
 	
-	tx.executeSql('Select * From ARTIST',[], function(tx,results){
+	transaction.executeSql('Select * From PESQUISAR',[], function(transaction,results){
+
 		var len = results.rows.length;
 
 		for(var i = 0; i < len; i++){
 
-			alert(results.rows[i]['NAME']);
+			(results.rows[i]['NAME']);
 
 		}
-		console.log(results);
+
+			console.log(results);
 	});
 });
+
+function BaseDados(sheldon){
+	this.bazuca = sheldon;
+
+	this.db = openDatabase("base.db","1.0","novo", 2 * 1024 * 1024);
+
+	function nullDataHandler(transaction, results) { }
+ 
+
+   this.db.transaction(
+        function (transaction) {
+ 
+            The first query causes the transaction to (intentionally) fail if the table exists.
+            transaction.executeSql("CREATE TABLE PESQUISAR("+			
+					"BOOK_ID INTEGER PRIMARY KEY NOT NULL,"+
+					"TITLE TEXT NOT NULL,"+
+					"SINOPSE TEXT,"+
+					"ISBN INT,"+
+					"IMG TEXT,"+
+					"LINKS TEXT,"+
+					"LIKES INT NOT NULL,"+
+					"DISLIKES INT NOT NULL)", [], nullDataHandler);
+
+        }
+    );
+
+	this.transe = function(){
+		var g3 = this.bazuca;
+	 	this.db.transaction(function(transaction) {
+		 	for (var j = 0; j<g3.shelf.data.length; j++){
+			    var newBook = j;
+			    var ing0 = g3.shelf.data[j].title;
+			    var ing1 = g3g3.bazuca.shelf.data[j].sinopse;
+			    var ing2 = g3.bazuca.shelf.data[j].isbn;
+			    var ing3 = g3.bazuca.shelf.data[j].img;
+			    var ing4 = g3.bazuca.shelf.data[j].links;
+			    transaction.executeSql('INSERT INTO PESQUISAR(BOOK_ID, TITLE, SINOPSE, ISBN, IMG, LINKS, LIKES, DISLIKES) VALUES (?,?,?,?,?,?)',[newBook, ing0, ing1, ing2, ing3, ing4]);
+			}
+		});
+	}
+
+	this.ver = function(){
+		this.db.transaction(function(transaction){
+		
+		transaction.executeSql('Select * From PESQUISAR',[], function(transaction,results){
+			var len = results.rows.length;
+
+			for(var i = 0; i < len; i++){
+
+				alert(results.rows[i]['TITLE']);
+
+			}
+			console.log(results);
+			});
+		});
+	}
+}
+
+var basenaval = new BaseDados(pesquisar);
+
+basenaval.transe();
+basenaval.ver();*/
 
 
